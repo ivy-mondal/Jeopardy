@@ -4,21 +4,21 @@ from openai import OpenAI
 
 def choose_ai_player(level):
     models = {
-        "super easy": "meta-llama/llama-3.1-8b-instruct",
-        "easy": "openai/gpt-4o-mini",
-        "medium": "meta-llama/llama-3.1-70b-instruct",
-        "hard": "openai/gpt-4o",
-        "final boss": "anthropic/claude-3.5-sonnet"
+        1: "meta-llama/llama-3.1-8b-instruct", #super easy
+        2: "openai/gpt-4o-mini", #easy
+        3: "meta-llama/llama-3.1-70b-instruct", #medium
+        4: "openai/gpt-4o", #hard
+        5: "anthropic/claude-3.5-sonnet"  #"final boss"
     }
     return models[level]
 
 
-def ai_player(level, topic, question):
+def ai_player(model, topic, question):
     api_key = open(".env", mode='r').read()
     client = OpenAI(base_url="https://openrouter.ai/api/v1",
                     api_key=api_key, )
     completion = client.chat.completions.create(
-        model=choose_ai_player(level),
+        model=model,
         temperature=0,
         messages=[
             {
@@ -32,7 +32,7 @@ def ai_player(level, topic, question):
         ]
     )
     result = completion.choices[0].message.content
-    return result
+    return result if result is not None else "dunno"
 
 """
 question_1 = "'Revolutionary War hero: \"His spirit is in Vermont now\"'"

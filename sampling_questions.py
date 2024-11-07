@@ -17,7 +17,7 @@ for value, count in point_counts.most_common():
 
 def create_question_level(data, min_value, max_value, file_name):
     questions_and_answers = [
-        {"question": item["question"], "answer": item["answer"]} for item in data if min_value < item["value"] <= max_value and item["value"] % 100 == 0
+        {"topic": item["topic"], "question": item["question"], "answer": item["answer"]} for item in data if min_value < item["value"] <= max_value and item["value"] % 100 == 0
     ]
     with open(file_name, 'w') as f:
         json.dump(questions_and_answers, f, indent=4)
