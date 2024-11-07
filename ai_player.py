@@ -4,11 +4,11 @@ from openai import OpenAI
 
 def choose_ai_player(level):
     models = {
-        1: "meta-llama/llama-3.1-8b-instruct", #super easy
-        2: "openai/gpt-4o-mini", #easy
-        3: "meta-llama/llama-3.1-70b-instruct", #medium
-        4: "openai/gpt-4o", #hard
-        5: "anthropic/claude-3.5-sonnet"  #"final boss"
+        1: "meta-llama/llama-3.1-8b-instruct",  # super easy
+        2: "openai/gpt-4o-mini",  # easy
+        3: "meta-llama/llama-3.1-70b-instruct",  # medium
+        4: "openai/gpt-4o",  # hard
+        5: "anthropic/claude-3.5-sonnet"  # "final boss"
     }
     return models[level]
 
@@ -33,6 +33,7 @@ def ai_player(model, topic, question):
     )
     result = completion.choices[0].message.content
     return result if result is not None else "dunno"
+
 
 """
 question_1 = "'Revolutionary War hero: \"His spirit is in Vermont now\"'"

@@ -35,18 +35,21 @@ def play_level(level, rounds, questions, topics, answers):
         print(f"Your question number {i + 1} is Topic:{topics[i]}\n Question:{questions[i]}")
         player_answer = input("Please write your answer here 🤓:")
         ai_answer = ai_player(model, topics[i], questions[i])
+        print(f"Soo your answer is {player_answer} and AI's answer is {ai_answer}")
         if the_judge(topics[i], questions[i], answers[i], player_answer):
             player_points += 5
             print("YOU ARE CORRECTO 🥳 ")
         else:
             player_points -= 1
-            print("WHOOPS 😱")
+            print("WHOOPS, silly you 😱")
+        print(f"The correct answer was {answers[i]}")
         if the_judge(topics[i], questions[i], answers[i], ai_answer):
             ai_points += 5
             print("SMORT AI 🤩")
         else:
             ai_points -= 1
-            print("OOF 😫")
+            print("OOF, silly AI😫")
+
     print("Game  Ovah!! 👀")
     print(f"SOOOOOO THE FINAL SCORE IS: AI = {ai_points} & You = {player_points}")
     return player_points, ai_points

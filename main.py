@@ -12,13 +12,23 @@ levels = {
 
 
 def play():
-    level = 1
 
     print("\n" + "=" * 50)
     time.sleep(0.5)
     print("Welcome to jeopardy! Let's see if you beat A.I. 😎 or get beaten by A.I. 🤖")
     time.sleep(1)
     print("GOOF LUCK!!👻")
+    time.sleep(1)
+
+    print("\nLEVEL SELECTION")
+    time.sleep(0.5)
+    game_route = input("Enter level number (2-5) to start from that level, or press Enter to start from level 1: ")
+    if game_route in ['2', '3', '4', '5']:
+        level = int(game_route)
+        print(f"Starting from level {level}! Brave choice! 💪")
+    else:
+        level = 1
+        print("Starting from level 1! Let's take it from the top! 🎮")
     time.sleep(1)
 
     while level <= 5:
