@@ -22,7 +22,9 @@ class JeopardyGUI:
         self.pulse_count = 0
 
         self.show_welcome_screen()
-        self.add_paw()
+        self.paw_image = Image.open("paw.png")
+        self.ps = 100
+        #self.add_paw()
 
     # Animate welcome text
     def animate_letter(self, text, y_pos, delay_start, letters=None):
@@ -60,7 +62,7 @@ class JeopardyGUI:
                             0,
                             y_offset
                         )
-                        self.window.after(50, lambda: grow(size + 2))
+                        self.window.after(25, lambda: grow(size + 2))
 
                 self.window.after(start_time, grow)
 
@@ -90,9 +92,9 @@ class JeopardyGUI:
         # Calculate positions based on screen height
         screen_height = self.window.winfo_height()
 
-        self.window.after(100, lambda: self.animate_letter("Welcome to", screen_height * 0.2, 0))
-        self.window.after(800, lambda: self.animate_letter("Meow-pardy! 😺", screen_height * 0.3, 0))
-        self.window.after(1500, lambda: self.animate_letter("Can you beat the A.I.? 🤖", screen_height * 0.4, 0))
+        self.window.after(100, lambda: self.animate_letter("Welcome to", screen_height * 0.1, 0))
+        self.window.after(800, lambda: self.animate_letter("Meow-pardy! 😺", screen_height * 0.2, 0))
+        self.window.after(1500, lambda: self.animate_letter("Can you beat the A.I.? 🤖", screen_height * 0.3, 0))
         self.window.after(2500, self.add_paw)
 
     # Glow animation
@@ -129,10 +131,9 @@ class JeopardyGUI:
                     growing = True
                     self.pulse_count += 1
 
-                current_width = int(200 * size)
-                current_height = int(200 * size)
-                paw_image_pulse = Image.open("paw.png")
-                paw_image_pulse = paw_image_pulse.resize((current_width, current_height), Image.LANCZOS)
+                current_width = int(self.ps * size)
+                current_height = int(self.ps * size)
+                paw_image_pulse = self.paw_image.resize((current_width, current_height), Image.LANCZOS)
                 self.paw_photo_pulse = ImageTk.PhotoImage(paw_image_pulse)
                 self.paw_button.configure(image=self.paw_photo_pulse)
 
@@ -146,12 +147,12 @@ class JeopardyGUI:
         paw_frame.pack(expand=True)
 
         paw_image = Image.open("paw.png")
-        paw_image = paw_image.resize((200, 200), Image.LANCZOS)
+        paw_image = paw_image.resize((self.ps, self.ps), Image.LANCZOS)
         self.paw_photo = ImageTk.PhotoImage(paw_image)
 
         # Create slightly larger image for hover effect
         paw_image_large = Image.open("paw.png")
-        paw_image_large = paw_image_large.resize((220, 220), Image.LANCZOS)
+        paw_image_large = paw_image_large.resize((int(self.ps*1.1), int(self.ps*1.1)), Image.LANCZOS)
         self.paw_photo_large = ImageTk.PhotoImage(paw_image_large)
 
         self.paw_button = tk.Button(
