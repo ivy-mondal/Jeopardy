@@ -1,4 +1,5 @@
 import math
+import random
 import tkinter as tk
 from datetime import datetime
 
@@ -110,7 +111,7 @@ def create_loading_screen(window, bg_color='#FFE5E5'):
     return loading_frame, gif_label, loading_label
 
 
-def animate_loading_gif(window, gif_path, callback, duration=5):
+def animate_loading_gif(window, gif_path, callback, duration=7):
     """All-in-one function to handle loading screen animation"""
     # Create UI elements
     _, gif_label, _ = create_loading_screen(window)
@@ -153,3 +154,67 @@ class LevelSelectionAnimations:
 
         button.bind('<Enter>', on_enter)
         button.bind('<Leave>', on_leave)
+
+    @staticmethod
+    def animate_gif(label, gif_path, loop=True):
+        def update_frame(frame_number):
+            frame = frames[frame_number]
+            label.configure(image=frame)
+            next_frame = (frame_number + 1) % n_frames if loop else frame_number + 1
+            if next_frame < n_frames:
+                label.after(50, update_frame, next_frame)
+
+        gif = Image.open(gif_path)
+        frames = []
+        try:
+            while True:
+                # Resize each frame to be larger
+                resized = gif.copy().resize((300, 200), Image.Resampling.LANCZOS)  # Made bigger to reduce compression
+                frames.append(ImageTk.PhotoImage(resized))
+                gif.seek(len(frames))
+        except EOFError:
+            pass
+
+        n_frames = len(frames)
+        label.frames = frames
+        update_frame(0)
+
+    @staticmethod
+    def create_driving_cat(parent, gif_path="media_files/level_select_screen.gif"):
+        """Creates a cat that drives back and forth (backwards when needed because YOLO)"""
+        bottom_frame = tk.Frame(parent, bg="#FAC8E4", height=300)
+        bottom_frame.pack(side=tk.BOTTOM, fill=tk.X)
+        bottom_frame.pack_propagate(False)
+
+        # Create gif label inside bottom frame
+        gif_label = tk.Label(bottom_frame)
+        gif_label.place(x=-100, y=50, width=300, height=200)
+
+        # Initialize direction
+        moving_right = True
+
+        def drive_animation():
+            nonlocal moving_right
+            window_width = parent.winfo_width()
+            current_x = gif_label.winfo_x()
+
+            if moving_right:
+                if current_x > window_width:
+                    moving_right = False
+                else:
+                    gif_label.place(x=current_x + 5, y=50)
+            else:
+                if current_x < -100:
+                    moving_right = True
+                else:
+                    gif_label.place(x=current_x - 5, y=50)
+
+            return parent.after(50, drive_animation)
+
+        try:
+            LevelSelectionAnimations.animate_gif(gif_label, gif_path, loop=True)
+            animation_id = drive_animation()
+            return animation_id, bottom_frame  # Return the frame instead of canvas
+        except Exception as e:
+            print(f"Error starting animation: {e}")
+            return None, None

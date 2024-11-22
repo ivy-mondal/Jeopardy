@@ -10,6 +10,7 @@ from ui_components import create_paw_button, LevelSelectionComponents
 class JeopardyGUI:
     def __init__(self):
         pygame.mixer.init()
+        self.click_sound = pygame.mixer.Sound("media_files/meow.mp3")
         self.window = tk.Tk()
         self.canvas = None
         self.pulse_active = True
@@ -60,7 +61,7 @@ class JeopardyGUI:
             self.window,
             self.paw_image,
             self.ps,
-            self.start_game
+            start_game_callback=lambda: [self.play_click_sound(), self.start_game()]
         )
         initial_pulse(
             window=self.window,
@@ -71,6 +72,9 @@ class JeopardyGUI:
             pulse_active=self.pulse_active
         )  # Start the initial pulse animation
 
+    def play_click_sound(self):
+        self.click_sound.play()
+
     def start_game(self):
         # Check if glow_after_id exists on window before trying to cancel
         if hasattr(self.window, 'glow_after_id'):
@@ -78,7 +82,6 @@ class JeopardyGUI:
         self.clear_window()
 
         def transition_to_game():
-            pygame.mixer.music.stop()
             self.show_game_screen()
 
         animate_loading_gif(
@@ -107,7 +110,7 @@ class JeopardyGUI:
             btn = LevelSelectionComponents.create_cat_button(
                 top_row,
                 level,
-                command=lambda l=level: self.start_level(l)
+                command=lambda l=level: [self.play_click_sound(), self.start_level(l)]
             )
             btn.pack(side=tk.LEFT, padx=10)
             LevelSelectionAnimations.add_hover_effect(btn)
@@ -120,7 +123,7 @@ class JeopardyGUI:
             btn = LevelSelectionComponents.create_cat_button(
                 bottom_row,
                 level,
-                command=lambda l=level: self.start_level(l)
+                command=lambda l=level: [self.play_click_sound(), self.start_level(l)]
             )
             btn.pack(side=tk.LEFT, padx=10)
             LevelSelectionAnimations.add_hover_effect(btn)
@@ -129,7 +132,21 @@ class JeopardyGUI:
         hint = LevelSelectionComponents.create_hint_label(self.window)
         hint.pack(pady=10)
 
+        # Add our chaotic driving cat! 🚗🐱
+        self.driving_cat_id, self.trail_canvas = LevelSelectionAnimations.create_driving_cat(
+            self.window,
+            "media_files/level_select_screen.gif"
+        )
+
+        # Add cleanup when switching screens
+        def cleanup():
+            if hasattr(self, 'driving_cat_id') and self.driving_cat_id:
+                self.window.after_cancel(self.driving_cat_id)
+            if hasattr(self, 'trail_canvas') and self.trail_canvas:
+                self.trail_canvas.destroy()
+
     def start_level(self, level):
+        pygame.mixer.music.stop()
         # This will be implemented later
         print(f"Starting level {level}! Meow!")
 
@@ -139,7 +156,13 @@ class JeopardyGUI:
         self.window.destroy()
 
     def clear_window(self):
-        # Clear all widgets from window
+        # Clean up driving cat animation and effects
+        if hasattr(self, 'driving_cat_id') and self.driving_cat_id:
+            self.window.after_cancel(self.driving_cat_id)
+        if hasattr(self, 'trail_canvas') and self.trail_canvas:
+            self.trail_canvas.destroy()
+
+        # Clear all widgets from window (your existing code)
         for widget in self.window.winfo_children():
             widget.destroy()
 
