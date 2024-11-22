@@ -2,16 +2,16 @@
 import json
 import random
 
-from ai_player import choose_ai_player, ai_player
-from judge_ai import the_judge
+from src.ai_fellas.ai_player import choose_ai_player, ai_player
+from src.ai_fellas.judge_ai import the_judge
 
 
 def fetch_question_file(level: int):
-    question_files = {1: "level_1_questions.json",
-                      2: "level_2_questions.json",
-                      3: "level_3_questions.json",
-                      4: "level_4_questions.json",
-                      5: "level_5_questions.json"}
+    question_files = {1: "datasets/level_1_questions.json",
+                      2: "datasets/level_2_questions.json",
+                      3: "datasets/level_3_questions.json",
+                      4: "datasets/level_4_questions.json",
+                      5: "datasets/level_5_questions.json"}
     return question_files[level]
 
 

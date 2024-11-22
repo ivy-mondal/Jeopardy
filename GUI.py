@@ -3,8 +3,8 @@ import tkinter as tk
 import pygame
 from PIL import Image
 
-from animations import animate_letter, glow_animation, initial_pulse, animate_loading_gif
-from ui_components import create_paw_button
+from animations import animate_letter, initial_pulse, animate_loading_gif, LevelSelectionAnimations
+from ui_components import create_paw_button, LevelSelectionComponents
 
 
 class JeopardyGUI:
@@ -88,7 +88,50 @@ class JeopardyGUI:
         )
 
     def show_game_screen(self):
-        pass
+        self.clear_window()
+        self.window.configure(bg="#FAC8E4")
+
+        # Create and pack title
+        title = LevelSelectionComponents.create_title(self.window)
+        title.pack(pady=20)
+
+        # Create main button grid frame
+        button_grid = LevelSelectionComponents.create_button_grid_frame(self.window)
+        button_grid.pack(pady=20)
+
+        # First row - Levels 1, 2, 3
+        top_row = tk.Frame(button_grid, bg="#FAC8E4")
+        top_row.pack()
+
+        for level in range(1, 4):
+            btn = LevelSelectionComponents.create_cat_button(
+                top_row,
+                level,
+                command=lambda l=level: self.start_level(l)
+            )
+            btn.pack(side=tk.LEFT, padx=10)
+            LevelSelectionAnimations.add_hover_effect(btn)
+
+        # Second row - Levels 4, 5
+        bottom_row = tk.Frame(button_grid, bg="#FAC8E4")
+        bottom_row.pack(pady=10)
+
+        for level in range(4, 6):
+            btn = LevelSelectionComponents.create_cat_button(
+                bottom_row,
+                level,
+                command=lambda l=level: self.start_level(l)
+            )
+            btn.pack(side=tk.LEFT, padx=10)
+            LevelSelectionAnimations.add_hover_effect(btn)
+
+        # Hint label
+        hint = LevelSelectionComponents.create_hint_label(self.window)
+        hint.pack(pady=10)
+
+    def start_level(self, level):
+        # This will be implemented later
+        print(f"Starting level {level}! Meow!")
 
     def on_closing(self):
         self.pulse_active = False

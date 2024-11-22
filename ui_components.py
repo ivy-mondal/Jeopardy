@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
 
 from animations import glow_animation
 
@@ -59,3 +59,92 @@ def create_paw_button(window, paw_image, ps, start_game_callback):
     paw_button.pack()
 
     return paw_frame, paw_button, high_five_label
+
+
+# For level selection screen
+class LevelSelectionComponents:
+    @staticmethod
+    def create_title(parent):
+        return tk.Label(parent,
+                        text="Choose Your Purr-fect Level!",
+                        font=("Kawaii", 24, "bold"),
+                        fg="#FF69B4",
+                        bg="#FAC8E4")
+
+
+    @staticmethod
+    def create_cat_button(parent, level, command):
+        # Create a frame for our cat button
+        cat_frame = tk.Frame(parent, bg="#FAC8E4")
+
+        emoji_map = {
+            1: "🐱",
+            2: "😺",
+            3: "😸",
+            4: "😻",
+            5: "🐱‍👤"
+        }
+
+        try:
+            # Load the cat face image
+            original_image = Image.open(f"media_files/cat_face_button.png")
+            # Resize to desired size
+            resized_image = original_image.resize((100, 100), Image.Resampling.LANCZOS)
+            cat_photo = ImageTk.PhotoImage(resized_image)
+
+            # Create label for the cat image
+            cat_label = tk.Label(
+                cat_frame,
+                image=cat_photo,
+                bg="#FAC8E4",
+            )
+            cat_label.image = cat_photo  # Keep a reference!
+
+            # Level number and emoji label
+            text_label = tk.Label(
+                cat_frame,
+                text=f"Level {level} {emoji_map[level]}",
+                font=("Kawaii", 14, "bold"),
+                fg="#FF1493",
+                bg="#FAC8E4"
+            )
+
+            # Pack widgets
+            cat_label.pack(pady=5)
+            text_label.pack()
+
+            def on_enter(e):
+                text_label.configure(fg="#FF69B4")
+                # Add hover effect here (could be a glow effect or subtle scale)
+
+            def on_leave(e):
+                text_label.configure(fg="#FF1493")
+
+            def on_click(e):
+                command()
+
+            # Bind events
+            for widget in (cat_label, text_label):
+                widget.bind("<Enter>", on_enter)
+                widget.bind("<Leave>", on_leave)
+                widget.bind("<Button-1>", on_click)
+
+        except Exception as e:
+            print(f"Couldn't load cat image: {e}")
+            # Fallback to a simple button if image loading fails
+            return tk.Button(parent, text=f"Level {level}")
+
+        return cat_frame
+
+    @staticmethod
+    def create_hint_label(parent):
+        return tk.Label(parent,
+                        text="Hint: Level 1 is purr-fect for beginners!",
+                        font=("Kawaii", 12, "italic"),
+                        fg="#75B8EB",
+                        bg="#FAC8E4")
+
+    @staticmethod
+    def create_button_grid_frame(parent, bg="#FAC8E4"):
+        frame = tk.Frame(parent, bg="#FAC8E4")
+        return frame

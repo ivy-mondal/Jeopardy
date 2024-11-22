@@ -139,3 +139,17 @@ def animate_loading_gif(window, gif_path, callback, duration=5):
         window.after(100, lambda: update_frame(frame_num, start_time))
 
     update_frame()
+
+
+# For level selection screen
+class LevelSelectionAnimations:
+    @staticmethod
+    def add_hover_effect(button):
+        def on_enter(e):
+            button['background'] = '#FF69B4'
+
+        def on_leave(e):
+            button['background'] = '#FFB6C1'
+
+        button.bind('<Enter>', on_enter)
+        button.bind('<Leave>', on_leave)
