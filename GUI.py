@@ -23,7 +23,7 @@ class JeopardyGUI:
         self.pulse_count = 0
         self.paw_button = None
         self.high_five_label = None
-        self.paw_image = Image.open("paw.png")
+        self.paw_image = Image.open("media_files/paw.png")
         self.ps = 100
         self.show_welcome_screen()
 
@@ -31,7 +31,7 @@ class JeopardyGUI:
         self.clear_window()
 
         try:
-            pygame.mixer.music.load("klee_theme.mp3")
+            pygame.mixer.music.load("media_files/klee_theme.mp3")
             pygame.mixer.music.set_volume(0.8)
             pygame.mixer.music.play(-1)
         except (pygame.error, FileNotFoundError):
@@ -83,7 +83,7 @@ class JeopardyGUI:
 
         animate_loading_gif(
             self.window,
-            "gamingcats.gif",
+            "media_files/gamingcats.gif",
             transition_to_game
         )
 

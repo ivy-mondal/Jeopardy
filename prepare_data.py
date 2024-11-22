@@ -1,7 +1,7 @@
 # Gotta prepare Questions and answers
 import json
 
-with open('JEOPARDY_QUESTIONS1.json', 'r', encoding='utf-8') as file:
+with open('datasets/JEOPARDY_QUESTIONS1.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
 extract_data = [
@@ -13,5 +13,5 @@ extract_data = [
     if not ('<a href' in item["question"] or '.mp3' in item["question"] or '<br' in item["question"])
 ]
 
-with open('dataset.json', 'w') as f:
+with open('datasets/dataset.json', 'w') as f:
     json.dump(extract_data, f, indent=4)

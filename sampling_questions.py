@@ -2,7 +2,7 @@
 import json
 from collections import Counter
 
-with open('dataset.json', 'r', encoding='utf-8') as file:
+with open('datasets/dataset.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
 total_items = len(data)
@@ -23,8 +23,8 @@ def create_question_level(data, min_value, max_value, file_name):
         json.dump(questions_and_answers, f, indent=4)
 
 
-create_question_level(data, 0, 300, "level_1_questions.json")
-create_question_level(data, 300, 600, "level_2_questions.json")
-create_question_level(data, 600, 1000, "level_3_questions.json")
-create_question_level(data, 1000, 2000, "level_4_questions.json")
-create_question_level(data, 2000, 18000, "level_5_questions.json")
+create_question_level(data, 0, 300, "datasets/level_1_questions.json")
+create_question_level(data, 300, 600, "datasets/level_2_questions.json")
+create_question_level(data, 600, 1000, "datasets/level_3_questions.json")
+create_question_level(data, 1000, 2000, "datasets/level_4_questions.json")
+create_question_level(data, 2000, 18000, "datasets/level_5_questions.json")
