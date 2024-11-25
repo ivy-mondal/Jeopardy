@@ -4,7 +4,7 @@ import pygame
 from PIL import Image
 
 from animations import animate_letter, initial_pulse, animate_loading_gif, LevelSelectionAnimations
-from ui_components import create_paw_button, LevelSelectionComponents
+from ui_components import create_paw_button, LevelSelectionComponents, RoundTopicSelectionComponents
 
 
 class JeopardyGUI:
@@ -27,6 +27,7 @@ class JeopardyGUI:
         self.paw_image = Image.open("media_files/paw.png")
         self.ps = 100
         self.show_welcome_screen()
+        self.round_components = RoundTopicSelectionComponents()
 
     def show_welcome_screen(self):
         self.clear_window()
@@ -73,6 +74,7 @@ class JeopardyGUI:
         )  # Start the initial pulse animation
 
     def play_click_sound(self):
+        pygame.mixer.music.set_volume(0.8)
         self.click_sound.play()
 
     def start_game(self):
@@ -147,8 +149,36 @@ class JeopardyGUI:
 
     def start_level(self, level):
         pygame.mixer.music.stop()
-        # This will be implemented later
-        print(f"Starting level {level}! Meow!")
+        pygame.mixer.music.load("media_files/calm_music.mp3")
+        pygame.mixer.music.play(-1)
+
+        for widget in self.window.winfo_children():
+            widget.destroy()
+        title = RoundTopicSelectionComponents.create_title(self.window)
+        title.pack(pady=20)
+
+        round_frame, self.round_entry = RoundTopicSelectionComponents.create_round_input(self.window)
+        round_frame.pack(pady=20)
+
+        topics_frame, self.topics_listbox = RoundTopicSelectionComponents.create_topics_listbox(self.window)
+        topics_frame.pack(pady=20)
+
+        # Create confirm button with validation callback
+        confirm_button = RoundTopicSelectionComponents.create_confirm_button(
+            self.window,
+            lambda: self.handle_confirmation(level)
+        )
+        confirm_button.pack(pady=20)
+
+    def handle_confirmation(self, level):
+        rounds, topics = RoundTopicSelectionComponents.validate_selections(
+            self.round_entry,
+            self.topics_listbox
+        )
+        if rounds and topics:
+            # Proceed with your game logic here
+            # self.start_game(level, rounds, topics)
+            pass
 
     def on_closing(self):
         self.pulse_active = False

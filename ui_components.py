@@ -1,6 +1,7 @@
 import tkinter as tk
+from tkinter import messagebox
 
-from PIL import Image, ImageTk, ImageDraw
+from PIL import Image, ImageTk
 
 from animations import glow_animation
 
@@ -70,7 +71,6 @@ class LevelSelectionComponents:
                         font=("Kawaii", 24, "bold"),
                         fg="#FF69B4",
                         bg="#FAC8E4")
-
 
     @staticmethod
     def create_cat_button(parent, level, command):
@@ -148,3 +148,107 @@ class LevelSelectionComponents:
     def create_button_grid_frame(parent, bg="#FAC8E4"):
         frame = tk.Frame(parent, bg="#FAC8E4")
         return frame
+
+
+# For round and topic selection
+class RoundTopicSelectionComponents:
+    @staticmethod
+    def create_title(window):
+        title = tk.Label(
+            window,
+            text=f"Neow time to set up your game! 👻",
+            font=("Kawaii", 24),
+            bg="#FAC8E4",
+            fg="#FF69B4"
+        )
+        return title
+
+    @staticmethod
+    def create_round_input(window):
+        round_frame = tk.Frame(window, bg="#FAC8E4")
+
+        round_label = tk.Label(
+            round_frame,
+            text="How many questions do you want? (Minimum 2)",
+            font=("Kawaii", 16),
+            bg="#FAC8E4",
+            fg="#FF69B4"
+        )
+        round_label.pack()
+
+        round_entry = tk.Entry(
+            round_frame,
+            width=10,
+            font=("Kawaii", 14),
+            justify='center'
+        )
+        round_entry.pack(pady=10)
+        return round_frame, round_entry
+
+    @staticmethod
+    def create_topics_listbox(window):
+        topics_frame = tk.Frame(window, bg="#FAC8E4")
+        topics_label = tk.Label(
+            topics_frame,
+            text="Select Your Topics!",
+            font=("Kawaii", 16),
+            bg="#FAC8E4",
+            fg="#FF69B4"
+        )
+        topics_label.pack()
+
+        list_frame = tk.Frame(topics_frame, bg="#FAC8E4")
+        list_frame.pack(pady=10)
+
+        topics_listbox = tk.Listbox(
+            list_frame,
+            selectmode=tk.MULTIPLE,
+            width=30,
+            height=6,
+            font=("Kawaii", 12),
+            bg="#FFF0F5",
+            selectbackground="#FF69B4"
+        )
+
+        scrollbar = tk.Scrollbar(list_frame, orient="vertical")
+        scrollbar.config(command=topics_listbox.yview)
+        topics_listbox.config(yscrollcommand=scrollbar.set)
+
+        topics_listbox.pack(side=tk.LEFT)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        return topics_frame, topics_listbox
+
+    @staticmethod
+    def create_confirm_button(window, callback):
+        confirm_button = tk.Button(
+            window,
+            text="I'm Ready! 🎮",
+            command=callback,
+            font=("Kawaii", 16),
+            bg="#FF69B4",
+            fg="white"
+        )
+        return confirm_button
+
+    @staticmethod
+    def validate_selections(round_entry, topics_listbox):
+        try:
+            rounds = int(round_entry.get())
+            if rounds < 2:
+                messagebox.showerror("Oopsie!", "You need at least 2 rounds! Don't be shy! 😊")
+                return None, None
+        except ValueError:
+            messagebox.showerror("Oopsie!", "Please enter a valid number! Numbers only, no emoji allowed! 😅")
+            return None, None
+
+        # Get selected topics
+        selected_indices = topics_listbox.curselection()
+        if not selected_indices:
+            messagebox.showerror("Oopsie!", "Please select at least one topic! Don't leave me hanging! 🎯")
+            return None, None
+
+        # Get the actual topics from the indices
+        selected_topics = [topics_listbox.get(i) for i in selected_indices]
+
+        return rounds, selected_topics

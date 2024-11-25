@@ -218,3 +218,5 @@ class LevelSelectionAnimations:
         except Exception as e:
             print(f"Error starting animation: {e}")
             return None, None
+
+
