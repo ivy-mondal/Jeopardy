@@ -6,6 +6,8 @@ from src.ai_fellas.ai_player import choose_ai_player, ai_player
 from src.ai_fellas.judge_ai import the_judge
 
 
+def get_topics(file, round):
+    pass
 def fetch_question_file(level: int):
     question_files = {1: "datasets/level_1_questions.json",
                       2: "datasets/level_2_questions.json",
